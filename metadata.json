@@ -1,0 +1,11 @@
+{
+  "name": "Material Canvas",
+  "description": "A creative image editor to overlay raw textures and physical elements (wood, metal, concrete) onto your photos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "Image Editing",
+    "Real-time Filtering",
+    "Cloud Sync (Firebase)",
+    "High-Density Dashboard UI"
+  ]
+}

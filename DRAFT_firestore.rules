@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidFilter(data) {
+      return data.name is string && data.name.size() <= 100 &&
+             data.userId == request.auth.uid &&
+             data.brightness is number &&
+             data.contrast is number &&
+             data.saturation is number &&
+             data.hue is number &&
+             data.createdAt == request.time;
+    }
+
+    match /filters/{filterId} {
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidFilter(request.resource.data);
+      allow update: if isSignedIn() && 
+                    resource.data.userId == request.auth.uid &&
+                    request.resource.data.userId == resource.data.userId &&
+                    isValidFilter(request.resource.data) &&
+                    request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'brightness', 'contrast', 'saturation', 'hue', 'createdAt']);
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

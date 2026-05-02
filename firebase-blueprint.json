@@ -1,0 +1,25 @@
+{
+  "entities": {
+    "Filter": {
+      "title": "Custom Filter",
+      "description": "A named set of image adjustment parameters.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Display name of the filter" },
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "brightness": { "type": "number", "description": "Value from -1 to 1" },
+        "contrast": { "type": "number", "description": "Value from -100 to 100" },
+        "saturation": { "type": "number", "description": "Value from -100 to 100" },
+        "hue": { "type": "number", "description": "Value from -180 to 180" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "userId", "brightness", "contrast", "saturation", "hue", "createdAt"]
+    }
+  },
+  "firestore": {
+    "filters": {
+      "schema": "Filter",
+      "description": "Collection of saved custom filters created by users."
+    }
+  }
+}
